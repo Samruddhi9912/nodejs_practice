@@ -1,8 +1,5 @@
-const express = require('express')
-const noteModel = require('../models/note.model');
+const express = require('express');
 
-
-const app = express()
-
+const app = express();
 
 module.exports = app
