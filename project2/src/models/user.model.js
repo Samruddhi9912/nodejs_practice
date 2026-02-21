@@ -18,8 +18,8 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: [ user, artist ],
-        default: user
+        enum: [ "user", "artist" ],
+        default: "user"
     }
 })
 
