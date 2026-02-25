@@ -13,7 +13,7 @@ async function createMusic(req,res){
     const music = await musicModel.create({
         uri: result.url,
         title,
-        artist: decoded.id,
+        artist: req.user.id,
     })
 
     res.status(201).json({
@@ -34,7 +34,7 @@ async function createAlbum(req,res){
 
         const album = await albumModel.create({
             title,
-            artist: decoded.id,
+            artist: req.user.id,
             musics: musics,
         })
 
@@ -48,4 +48,43 @@ async function createAlbum(req,res){
             }
     })
 }
-module.exports = { createMusic, createAlbum }
+
+async function getAllMusics(req,res){
+
+    const musics = await musicModel
+        .find()
+        .limit(20)
+        .populate("artist", "username email")
+
+    res.status(200).json({
+        message: "Music fetched successfully",
+        musics: musics,
+    })
+
+}
+
+async function getAllAlbums(req,res){
+
+    const musics = await musicModel.find().select("title artist  ").populate("artist", "username email")
+
+    res.status(200).json({
+        message: "Album fetched successfully",
+        albums: albums,
+    })
+
+}
+
+async function getAlbumById(req,res){
+
+    const albumId = req.params.albumId;
+
+    const album = await albumModel.findById(albumId).populate("artist", "username email").populate("music")
+
+    return res.status(200).json({
+        message: "Album fetched Successfully",
+        album: album
+    })
+
+}
+
+module.exports = { createMusic, createAlbum, getAllMusics, getAllAlbums, getAlbumById }
